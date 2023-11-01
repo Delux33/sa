@@ -43,4 +43,9 @@ public class ProductRest {
     public void deleteProduct(@PathVariable Long id) {
         productRepo.deleteById(id);
     }
+
+    @DeleteMapping()
+    public void deleteProduct() {
+        productRepo.deleteAll();
+    }
 }
