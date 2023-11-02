@@ -1,7 +1,7 @@
 package com.sa.controller;
 
 import com.sa.entity.Product;
-import com.sa.repos.ProductRepository;
+import com.sa.service.impl.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,40 +12,35 @@ import java.util.List;
 public class ProductRest {
 
     @Autowired
-    private ProductRepository productRepo;
+    private ProductService productService;
 
     @GetMapping
     public List<Product> getAllProducts() {
-        return (List<Product>) productRepo.findAll();
+        return productService.getAll();
     }
 
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
-        return productRepo.findById(id).orElse(null);
+        return productService.getById(id);
     }
 
     @PostMapping
     public void createProduct(@RequestBody Product product) {
-        productRepo.save(product);
+        productService.create(product);
     }
 
     @PutMapping("/{id}")
-    public Product updateProduct(@PathVariable Long id,
-                                 @RequestBody Product product) {
-        if (productRepo.existsById(id)) {
-            product.setId(id);
-            return productRepo.save(product);
-        }
-        return null;
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
+        return productService.update(id, product);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteProduct(@PathVariable Long id) {
-        productRepo.deleteById(id);
+    public void deleteAllProducts(@PathVariable Long id) {
+        productService.deleteById(id);
     }
 
     @DeleteMapping()
-    public void deleteProduct() {
-        productRepo.deleteAll();
+    public void deleteAllProducts() {
+        productService.deleteAll();
     }
 }
