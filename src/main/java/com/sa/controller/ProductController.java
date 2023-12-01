@@ -12,12 +12,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("api/products")
+@RequestMapping( "api/products")
 @Tag(name = "Product API", description = "API по управлению продуктами")
 public class ProductController {
 
@@ -59,15 +60,11 @@ public class ProductController {
 
     @Operation(summary = "Создание нового продукта")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт успешно создан"),
-            @ApiResponse(responseCode = "400", description = "Некорректный запрос",
-                    content = @Content)
+            @ApiResponse(responseCode = "200", description = "Продукт успешно создан", content = @Content),
+            @ApiResponse(responseCode = "400", description = "Некорректный запрос", content = @Content)
     })
-    @PostMapping
-    public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = @Content(mediaType = "application/json",
-                    examples = @ExampleObject(name = "Создать продукт", value = "{\"name\": \"example\", \"price\": 1.1}")))
-                              @RequestBody ProductForSwagger productForSwagger) {
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody ProductForSwagger productForSwagger) {
         productService.create(new Product(productForSwagger.getName(), productForSwagger.getPrice()));
     }
 
@@ -79,12 +76,9 @@ public class ProductController {
             @ApiResponse(responseCode = "400", description = "Некорректный запрос",
                     content = @Content)
     })
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Product updateProduct(@PathVariable Long id,
-                                 @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                                         content = @Content(mediaType = "application/json",
-                                                 examples = @ExampleObject(name = "Обновить продукт", value = "{\"name\": \"example\", \"price\": 1.1}")))
-                                 @RequestBody ProductForSwagger productForSwagger) {
+                                 @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody ProductForSwagger productForSwagger) {
 //      ResponseEntity.ok(update);
         return productService.update(id, new Product(productForSwagger.getName(), productForSwagger.getPrice()));
     }
