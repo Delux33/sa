@@ -25,6 +25,11 @@ public class ProductService implements IDefaultService<Product> {
     }
 
     @Override
+    public List<Product> getByName(String productName) {
+        return productRepo.findByName(productName);
+    }
+
+    @Override
     public void create(Product product) {
         productRepo.save(product);
     }
