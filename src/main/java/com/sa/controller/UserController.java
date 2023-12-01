@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,11 +63,8 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Пользователь успешно создан"),
             @ApiResponse(responseCode = "400", description = "Некорректный запрос")
     })
-    @PostMapping
-    public void createUser(@io.swagger.v3.oas.annotations.parameters.RequestBody(
-            content = @Content(mediaType = "application/json",
-                    examples = @ExampleObject(name = "Создать пользователя", value = "{\"name\": \"example\", \"lastname\": \"example\", \"surname\": \"example\"}")))
-                               @RequestBody UserForSwagger userForSwagger) {
+    @PostMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    public void createUser(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody UserForSwagger userForSwagger) {
         userService.create(new User(userForSwagger.getName(), userForSwagger.getLastname(), userForSwagger.getSurname()));
     }
 
@@ -78,12 +76,9 @@ public class UserController {
             @ApiResponse(responseCode = "400", description = "Некорректный запрос",
                     content = @Content)
     })
-    @PutMapping("/{id}")
+    @PutMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public User updateUser(@PathVariable Long id,
-                           @io.swagger.v3.oas.annotations.parameters.RequestBody(
-                                   content = @Content(mediaType = "application/json",
-                                           examples = @ExampleObject(name = "Обновить пользователя", value = "{\"name\": \"example\", \"lastname\": \"example\", \"surname\": \"example\"}")))
-                           @RequestBody UserForSwagger userForSwagger) {
+                           @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody UserForSwagger userForSwagger) {
         return userService.update(id, new User(userForSwagger.getName(), userForSwagger.getLastname(), userForSwagger.getSurname()));
     }
 
