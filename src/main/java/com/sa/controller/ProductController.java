@@ -53,7 +53,7 @@ public class ProductController {
                             array = @ArraySchema(schema = @Schema(implementation = Product.class))))
     })
     @GetMapping("/name/{name}")
-    public List<Product> getProductByName(@PathVariable String productName) {
+    public List<Product> getProductsByName(@PathVariable @RequestParam String productName) {
         return productService.getByName(productName);
     }
 
@@ -100,7 +100,7 @@ public class ProductController {
 
     @Operation(summary = "Удаление всех продуктов")
     @DeleteMapping()
-    public void deleteProducts() {
+    public void deleteAllProducts() {
         productService.deleteAll();
     }
 }
