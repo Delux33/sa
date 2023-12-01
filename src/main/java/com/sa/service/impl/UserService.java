@@ -26,8 +26,9 @@ public class UserService implements IDefaultService<User> {
 
     @Override
     public List<User> getByName(String userName) {
-        return userRepo.findByName(userName).stream().toList();
+        return userRepo.findByName(userName);
     }
+
 
     @Override
     public void create(User product) {
