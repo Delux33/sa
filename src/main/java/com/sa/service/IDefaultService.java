@@ -8,6 +8,8 @@ public interface IDefaultService<T> {
 
     T getById(Long id);
 
+    List<T> getByName(String name);
+
     void create(T obj);
 
     T update(Long id, T obj);

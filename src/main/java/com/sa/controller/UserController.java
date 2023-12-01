@@ -2,6 +2,8 @@ package com.sa.controller;
 
 import com.sa.entity.User;
 import com.sa.service.impl.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,11 +11,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/users")
-public class UserRest {
+@Tag(name = "User API", description = "API по управлению юзерами")
+public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Получить всех пользователей")
     @GetMapping
     public List<User> getAllUsers() {
         return userService.getAll();

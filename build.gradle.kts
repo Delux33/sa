@@ -26,10 +26,11 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-rest")
     compileOnly("org.projectlombok:lombok")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
-    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
+//    developmentOnly("org.springframework.boot:spring-boot-docker-compose")
     implementation("org.postgresql:postgresql")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0")
 }
 
 tasks.withType<Test> {
