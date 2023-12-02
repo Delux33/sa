@@ -1,17 +1,17 @@
 package com.sa.controller;
 
+import com.sa.constant.Constants;
 import com.sa.entity.Product;
 import com.sa.entity.swagger.ProductForSwagger;
 import com.sa.service.impl.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,9 +27,14 @@ public class ProductController {
 
     @Operation(summary = "Получить все продукты")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукты найдены",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+            @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Продукты найдены",
+                    content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Product.class)),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
+                                    schema = @Schema(implementation = Product.class))
+                    }
+            )
     })
     @GetMapping
     public List<Product> getAllProducts() {
@@ -38,9 +43,14 @@ public class ProductController {
 
     @Operation(summary = "Получить продукт по его ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт найден",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Product.class)))
+            @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Продукт найден",
+                    content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Product.class)),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
+                                    schema = @Schema(implementation = Product.class))
+                    }
+            )
     })
     @GetMapping("/{id}")
     public Product getProductById(@PathVariable Long id) {
@@ -49,9 +59,14 @@ public class ProductController {
 
     @Operation(summary = "Получить продукт(ы) по названию")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт найден",
-                    content = @Content(mediaType = "application/json",
-                            array = @ArraySchema(schema = @Schema(implementation = Product.class))))
+            @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Продукт найден",
+                    content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Product.class)),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
+                                    schema = @Schema(implementation = Product.class))
+                    }
+            )
     })
     @GetMapping("/name/{name}")
     public List<Product> getProductsByName(@PathVariable @RequestParam String productName) {
@@ -60,20 +75,26 @@ public class ProductController {
 
     @Operation(summary = "Создание нового продукта")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт успешно создан", content = @Content),
-            @ApiResponse(responseCode = "400", description = "Некорректный запрос", content = @Content)
+            @ApiResponse(responseCode = Constants.StatusCode.CREATED_201_STR, description = "Продукт успешно создан", content = @Content),
+            @ApiResponse(responseCode = Constants.StatusCode.BAD_REQUEST_400_STR, description = "Некорректный запрос", content = @Content)
     })
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @ResponseStatus(HttpStatus.CREATED)
     public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody ProductForSwagger productForSwagger) {
         productService.create(new Product(productForSwagger.getName(), productForSwagger.getPrice()));
     }
 
     @Operation(summary = "Обновление продукта по его ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт успешно обновлен",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = Product.class))),
-            @ApiResponse(responseCode = "400", description = "Некорректный запрос",
+            @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Продукт успешно обновлен",
+                    content = {
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = Product.class)),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
+                                    schema = @Schema(implementation = Product.class))
+                    }
+            ),
+            @ApiResponse(responseCode = Constants.StatusCode.BAD_REQUEST_400_STR, description = "Некорректный запрос",
                     content = @Content)
     })
     @PutMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
@@ -85,7 +106,7 @@ public class ProductController {
 
     @Operation(summary = "Удаление продукта по ID")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Продукт успешно удален")
+            @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Продукт успешно удален")
     })
     @DeleteMapping("/{id}")
     public void deleteProductById(@PathVariable Long id) {
