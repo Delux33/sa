@@ -36,10 +36,10 @@ public class UserService implements IDefaultService<User> {
     }
 
     @Override
-    public User update(Long id, User product) {
+    public User update(Long id, User user) {
         if (userRepo.existsById(id)) {
-            product.setId(id);
-            return userRepo.save(product);
+            user.setId(id);
+            return userRepo.save(user);
         }
         return null;
     }

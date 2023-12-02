@@ -2,7 +2,6 @@ package com.sa.controller;
 
 import com.sa.constant.Constants;
 import com.sa.entity.Product;
-import com.sa.entity.swagger.ProductForSwagger;
 import com.sa.service.impl.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping( "api/products")
+@RequestMapping("api/products")
 @Tag(name = "Product API", description = "API по управлению продуктами")
 public class ProductController {
 
@@ -80,8 +79,8 @@ public class ProductController {
     })
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody ProductForSwagger productForSwagger) {
-        productService.create(new Product(productForSwagger.getName(), productForSwagger.getPrice()));
+    public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product) {
+        productService.create(product);
     }
 
     @Operation(summary = "Обновление продукта по его ID")
@@ -99,9 +98,9 @@ public class ProductController {
     })
     @PutMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public Product updateProduct(@PathVariable Long id,
-                                 @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody ProductForSwagger productForSwagger) {
+                                 @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product) {
 //      ResponseEntity.ok(update);
-        return productService.update(id, new Product(productForSwagger.getName(), productForSwagger.getPrice()));
+        return productService.update(id, product);
     }
 
     @Operation(summary = "Удаление продукта по ID")

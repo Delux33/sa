@@ -2,7 +2,6 @@ package com.sa.controller;
 
 import com.sa.constant.Constants;
 import com.sa.entity.User;
-import com.sa.entity.swagger.UserForSwagger;
 import com.sa.service.impl.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.HttpURLConnection;
 import java.util.List;
 
 @RestController
@@ -80,20 +78,20 @@ public class UserController {
             @ApiResponse(responseCode = Constants.StatusCode.BAD_REQUEST_400_STR, description = "Некорректный запрос")
     })
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
-                produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+            produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody UserForSwagger userForSwagger) {
-        userService.create(new User(userForSwagger.getName(), userForSwagger.getLastname(), userForSwagger.getSurname()));
+    public void createUser(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user) {
+        userService.create(user);
     }
 
     @Operation(summary = "Обновление пользователя по его ID")
     @ApiResponses(value = {
             @ApiResponse(responseCode = Constants.StatusCode.OK_200_STR, description = "Пользователь успешно обновлен",
                     content = {
-                        @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                schema = @Schema(implementation = User.class)),
-                        @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
-                                schema = @Schema(implementation = User.class))
+                            @Content(mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = User.class)),
+                            @Content(mediaType = MediaType.APPLICATION_XML_VALUE,
+                                    schema = @Schema(implementation = User.class))
                     }
             ),
             @ApiResponse(responseCode = Constants.StatusCode.BAD_REQUEST_400_STR, description = "Некорректный запрос",
@@ -103,8 +101,8 @@ public class UserController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
     public User updateUser(@PathVariable Long id,
-                           @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody UserForSwagger userForSwagger) {
-        return userService.update(id, new User(userForSwagger.getName(), userForSwagger.getLastname(), userForSwagger.getSurname()));
+                           @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user) {
+        return userService.update(id, user);
     }
 
     @Operation(summary = "Удаление пользователя по ID")
