@@ -1,6 +1,5 @@
 package com.sa.entity;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 @Entity
 @Data
@@ -34,4 +35,7 @@ public class User {
     private String lastname;
 
     private String surname;
+
+    @OneToMany(mappedBy = "owner" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Pet> pets;
 }

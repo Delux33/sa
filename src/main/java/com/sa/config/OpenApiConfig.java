@@ -6,8 +6,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @OpenAPIDefinition(
         info = @Info(
-                title = "API documentation for SA application",
-                description = "API for Products and Users", version = "1.0.0"
+                title = "Документация API для того чтобы потыкать swagger и postman",
+                version = "1.0.0"
         )
 )
 @ComponentScan(basePackages = "com.sa.controller")

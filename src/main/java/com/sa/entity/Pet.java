@@ -2,23 +2,19 @@ package com.sa.entity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Table(name = "products")
-public class Product {
+@Table(name = "pets")
+public class Pet {
 
-    public Product(String name, Double price) {
+    public Pet(@NonNull String name, User owner) {
         this.name = name;
-        this.price = price;
+        this.owner = owner;
     }
 
     @Id
@@ -26,9 +22,9 @@ public class Product {
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     private Long id;
 
-    @NotNull
+    @NonNull
     private String name;
 
-    @NotNull
-    private Double price;
+    @ManyToOne
+    private User owner;
 }

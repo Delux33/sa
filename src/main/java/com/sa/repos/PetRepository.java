@@ -1,6 +1,6 @@
 package com.sa.repos;
 
-import com.sa.entity.User;
+import com.sa.entity.Pet;
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Hidden
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface PetRepository extends CrudRepository<Pet, Long> {
 
-    List<User> findByName(String userName);
+    List<Pet> findByName(String petName);
 }

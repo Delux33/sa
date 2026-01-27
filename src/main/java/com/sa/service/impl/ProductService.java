@@ -3,16 +3,16 @@ package com.sa.service.impl;
 import com.sa.entity.Product;
 import com.sa.repos.ProductRepository;
 import com.sa.service.IDefaultService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService implements IDefaultService<Product> {
 
-    @Autowired
-    private ProductRepository productRepo;
+    private final ProductRepository productRepo;
 
     @Override
     public List<Product> getAll() {

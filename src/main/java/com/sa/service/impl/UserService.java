@@ -3,29 +3,30 @@ package com.sa.service.impl;
 import com.sa.entity.User;
 import com.sa.repos.UserRepository;
 import com.sa.service.IDefaultService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserService implements IDefaultService<User> {
 
-    @Autowired
-    private UserRepository userRepo;
+    private final UserRepository userRepo;
 
     @Override
-    public List<User> getAll() {
+    public ResponseEntity<List<User>> getAll() {
         return (List<User>) userRepo.findAll();
     }
 
     @Override
-    public User getById(Long id) {
+    public ResponseEntity<User> getById(Long id) {
         return userRepo.findById(id).orElse(null);
     }
 
     @Override
-    public List<User> getByName(String userName) {
+    public ResponseEntity<List<User>> getByName(String userName) {
         return userRepo.findByName(userName);
     }
 
@@ -36,7 +37,7 @@ public class UserService implements IDefaultService<User> {
     }
 
     @Override
-    public User update(Long id, User user) {
+    public ResponseEntity<User> update(Long id, User user) {
         if (userRepo.existsById(id)) {
             user.setId(id);
             return userRepo.save(user);
