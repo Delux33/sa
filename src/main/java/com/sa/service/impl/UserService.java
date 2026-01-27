@@ -4,6 +4,7 @@ import com.sa.entity.User;
 import com.sa.repos.UserRepository;
 import com.sa.service.IDefaultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -17,32 +18,36 @@ public class UserService implements IDefaultService<User> {
 
     @Override
     public ResponseEntity<List<User>> getAll() {
-        return (List<User>) userRepo.findAll();
+        List<User> users = (List<User>) userRepo.findAll();
+        return ResponseEntity.ok(users);
     }
 
     @Override
     public ResponseEntity<User> getById(Long id) {
-        return userRepo.findById(id).orElse(null);
+        return userRepo.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
     public ResponseEntity<List<User>> getByName(String userName) {
-        return userRepo.findByName(userName);
+        List<User> users = userRepo.findByName(userName);
+        return ResponseEntity.ok(users);
     }
 
-
     @Override
-    public void create(User product) {
-        userRepo.save(product);
+    public void create(User user) {
+        userRepo.save(user);
     }
 
     @Override
     public ResponseEntity<User> update(Long id, User user) {
         if (userRepo.existsById(id)) {
             user.setId(id);
-            return userRepo.save(user);
+            User saved = userRepo.save(user);
+            return ResponseEntity.ok(saved);
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override

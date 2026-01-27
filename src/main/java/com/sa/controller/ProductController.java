@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,8 +20,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -52,7 +51,7 @@ public class ProductController {
             }
     )
     @GetMapping
-    public List<Product> getAllProducts() {
+    public ResponseEntity<List<Product>> getAllProducts() {
         return productService.getAll();
     }
 
@@ -75,7 +74,7 @@ public class ProductController {
             }
     )
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable Long id) {
+    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
         return productService.getById(id);
     }
 
@@ -98,7 +97,7 @@ public class ProductController {
             }
     )
     @GetMapping("/name/{name}")
-    public List<Product> getProductsByName(@PathVariable @RequestParam String name) {
+    public ResponseEntity<List<Product>> getProductsByName(@PathVariable String name) {
         return productService.getByName(name);
     }
 
@@ -118,9 +117,11 @@ public class ProductController {
             }
     )
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createProduct(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product) {
+    public ResponseEntity<Void> createProduct(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product
+    ) {
         productService.create(product);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Обновление продукта по его ID")
@@ -147,8 +148,10 @@ public class ProductController {
             }
     )
     @PutMapping(value = "/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
-    public Product updateProduct(@PathVariable Long id,
-                                 @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product) {
+    public ResponseEntity<Product> updateProduct(
+            @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody Product product
+    ) {
         return productService.update(id, product);
     }
 

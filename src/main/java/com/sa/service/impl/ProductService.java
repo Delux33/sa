@@ -4,6 +4,8 @@ import com.sa.entity.Product;
 import com.sa.repos.ProductRepository;
 import com.sa.service.IDefaultService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,18 +17,22 @@ public class ProductService implements IDefaultService<Product> {
     private final ProductRepository productRepo;
 
     @Override
-    public List<Product> getAll() {
-        return (List<Product>) productRepo.findAll();
+    public ResponseEntity<List<Product>> getAll() {
+        List<Product> products = (List<Product>) productRepo.findAll();
+        return ResponseEntity.ok(products);
     }
 
     @Override
-    public Product getById(Long id) {
-        return productRepo.findById(id).orElse(null);
+    public ResponseEntity<Product> getById(Long id) {
+        return productRepo.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
-    public List<Product> getByName(String productName) {
-        return productRepo.findByName(productName);
+    public ResponseEntity<List<Product>> getByName(String productName) {
+        List<Product> products = productRepo.findByName(productName);
+        return ResponseEntity.ok(products);
     }
 
     @Override
@@ -35,12 +41,13 @@ public class ProductService implements IDefaultService<Product> {
     }
 
     @Override
-    public Product update(Long id, Product product) {
+    public ResponseEntity<Product> update(Long id, Product product) {
         if (productRepo.existsById(id)) {
             product.setId(id);
-            return productRepo.save(product);
+            Product saved = productRepo.save(product);
+            return ResponseEntity.ok(saved);
         }
-        return null;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override

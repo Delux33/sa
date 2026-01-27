@@ -4,11 +4,15 @@ import com.sa.entity.Pet;
 import com.sa.repos.PetRepository;
 import com.sa.service.IDefaultService;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.connector.Response;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -17,20 +21,23 @@ public class PetService implements IDefaultService<Pet> {
 
     private final PetRepository petRepo;
 
-
     @Override
-    public List<Pet> getAll() {
-        return (List<Pet>) petRepo.findAll();
+    public ResponseEntity<List<Pet>> getAll() {
+        List<Pet> pets = (List<Pet>) petRepo.findAll();
+        return ResponseEntity.ok(pets);
     }
 
     @Override
-    public Pet getById(Long id) {
-        return petRepo.findById(id).orElse(null);
+    public ResponseEntity<Pet> getById(Long id) {
+        return petRepo.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @Override
-    public List<Pet> getByName(String petName) {
-        return petRepo.findByName(petName);
+    public ResponseEntity<List<Pet>> getByName(String petName) {
+        List<Pet> pets = petRepo.findByName(petName);
+        return ResponseEntity.ok(pets);
     }
 
     @Override
@@ -43,9 +50,9 @@ public class PetService implements IDefaultService<Pet> {
         if (petRepo.existsById(id)) {
             pet.setId(id);
             Pet savedPet = petRepo.save(pet);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedPet);
+            return ResponseEntity.ok(savedPet);
         }
-        return ResponseEntity.notFound().build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @Override
@@ -56,5 +63,45 @@ public class PetService implements IDefaultService<Pet> {
     @Override
     public void deleteAll() {
         petRepo.deleteAll();
+    }
+
+    public ResponseEntity<Page<Pet>> searchPetsByOwner(
+            Long ownerId,
+            int page,
+            int size,
+            String sortBy,
+            String sortDir,
+            String name,
+            String nameContains
+    ) {
+        Sort.Direction direction = Sort.Direction.fromOptionalString(sortDir).orElse(Sort.Direction.ASC);
+        Sort sort = Sort.by(direction, sortBy);
+
+        List<Pet> baseList;
+        if (name != null && !name.isBlank()) {
+            baseList = petRepo.findByOwnerIdAndName(ownerId, name);
+        } else if (nameContains != null && !nameContains.isBlank()) {
+            baseList = petRepo.findByOwnerIdAndNameContainingIgnoreCase(ownerId, nameContains);
+        } else {
+            baseList = petRepo.findByOwnerId(ownerId);
+        }
+
+        Comparator<Pet> comparator;
+        switch (sortBy) {
+            case "name" -> comparator = Comparator.comparing(Pet::getName, String.CASE_INSENSITIVE_ORDER);
+            case "id" -> comparator = Comparator.comparing(Pet::getId, Comparator.nullsLast(Long::compareTo));
+            default -> comparator = Comparator.comparing(Pet::getId, Comparator.nullsLast(Long::compareTo));
+        }
+        if (direction == Sort.Direction.DESC) {
+            comparator = comparator.reversed();
+        }
+        baseList.sort(comparator);
+
+        int fromIndex = Math.min(page * size, baseList.size());
+        int toIndex = Math.min(fromIndex + size, baseList.size());
+        List<Pet> content = baseList.subList(fromIndex, toIndex);
+
+        Page<Pet> result = new PageImpl<>(content, PageRequest.of(page, size, sort), baseList.size());
+        return ResponseEntity.ok(result);
     }
 }

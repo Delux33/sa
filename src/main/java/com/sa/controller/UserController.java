@@ -1,7 +1,6 @@
 package com.sa.controller;
 
 import com.sa.constant.Constants;
-import com.sa.entity.Pet;
 import com.sa.entity.User;
 import com.sa.service.impl.PetService;
 import com.sa.service.impl.UserService;
@@ -56,7 +55,7 @@ public class UserController {
             }
     )
     @GetMapping
-    public List<User> getAllUsers() {
+    public ResponseEntity<List<User>> getAllUsers() {
         return userService.getAll();
     }
 
@@ -79,7 +78,7 @@ public class UserController {
             }
     )
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public ResponseEntity<User> getUserById(@PathVariable Long id) {
         return userService.getById(id);
     }
 
@@ -102,7 +101,7 @@ public class UserController {
             }
     )
     @GetMapping("/name/{name}")
-    public List<User> getUsersByName(@PathVariable @RequestParam String name) {
+    public ResponseEntity<List<User>> getUsersByName(@PathVariable String name) {
         return userService.getByName(name);
     }
 
@@ -123,9 +122,11 @@ public class UserController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    @ResponseStatus(HttpStatus.CREATED)
-    public void createUser(@io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user) {
+    public ResponseEntity<Void> createUser(
+            @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user
+    ) {
         userService.create(user);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "Обновление пользователя по его ID")
@@ -157,8 +158,10 @@ public class UserController {
             consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
     )
-    public User updateUser(@PathVariable Long id,
-                           @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user) {
+    public ResponseEntity<User> updateUser(
+            @PathVariable Long id,
+            @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody User user
+    ) {
         return userService.update(id, user);
     }
 

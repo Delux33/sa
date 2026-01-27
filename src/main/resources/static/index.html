@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <title>SA Demo UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="app">
+    <header class="app-header">
+        <h1>System Analytics training API Console</h1>
+        <p>Панель для работы с пользователями, питомцами и продуктами</p>
+    </header>
+
+    <main class="app-main">
+        <section class="panel panel--tabs">
+            <div class="tabs">
+                <button class="tab active" data-tab="users">Пользователи</button>
+                <button class="tab" data-tab="pets">Питомцы</button>
+                <button class="tab" data-tab="products">Продукты</button>
+            </div>
+
+            <div class="tab-content active" id="tab-users">
+                <div class="panel-grid">
+                    <div class="card">
+                        <h2>Список пользователей</h2>
+                        <div class="toolbar">
+                            <button id="reload-users" class="btn btn-secondary">Обновить</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя</th>
+                                    <th>Фамилия</th>
+                                    <th>Отчество</th>
+                                </tr>
+                                </thead>
+                                <tbody id="users-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Создать пользователя</h2>
+                        <form id="create-user-form" class="form">
+                            <label>
+                                Имя
+                                <input name="name" required />
+                            </label>
+                            <label>
+                                Фамилия
+                                <input name="lastname" />
+                            </label>
+                            <label>
+                                Отчество
+                                <input name="surname" />
+                            </label>
+                            <button type="submit" class="btn btn-primary">Создать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-pets">
+                <div class="panel-grid">
+                    <div class="card">
+                        <h2>Питомцы пользователя</h2>
+                        <form id="load-user-pets-form" class="form form-inline">
+                            <label>
+                                ID пользователя
+                                <input name="userId" type="number" min="1" required />
+                            </label>
+                            <label>
+                                Имя (точно)
+                                <input name="name" />
+                            </label>
+                            <label>
+                                Имя содержит
+                                <input name="nameContains" />
+                            </label>
+                            <label>
+                                Страница
+                                <input name="page" type="number" min="0" value="0" />
+                            </label>
+                            <label>
+                                Размер
+                                <input name="size" type="number" min="1" value="10" />
+                            </label>
+                            <label>
+                                Сортировка
+                                <select name="sortBy">
+                                    <option value="id">id</option>
+                                    <option value="name">name</option>
+                                </select>
+                            </label>
+                            <label>
+                                Направление
+                                <select name="sortDir">
+                                    <option value="ASC">ASC</option>
+                                    <option value="DESC">DESC</option>
+                                </select>
+                            </label>
+                            <button type="submit" class="btn btn-secondary">Загрузить</button>
+                        </form>
+
+                        <div id="pets-pagination" class="pagination"></div>
+
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Имя</th>
+                                    <th>ID владельца</th>
+                                </tr>
+                                </thead>
+                                <tbody id="pets-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Создать питомца</h2>
+                        <form id="create-pet-form" class="form">
+                            <label>
+                                ID пользователя (владельца)
+                                <input name="userId" type="number" min="1" required />
+                            </label>
+                            <label>
+                                Имя питомца
+                                <input name="name" required />
+                            </label>
+                            <button type="submit" class="btn btn-primary">Создать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="tab-products">
+                <div class="panel-grid">
+                    <div class="card">
+                        <h2>Список продуктов</h2>
+                        <div class="toolbar">
+                            <button id="reload-products" class="btn btn-secondary">Обновить</button>
+                        </div>
+                        <div class="table-wrapper">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Название</th>
+                                    <th>Цена</th>
+                                </tr>
+                                </thead>
+                                <tbody id="products-table-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h2>Создать продукт</h2>
+                        <form id="create-product-form" class="form">
+                            <label>
+                                Название
+                                <input name="name" required />
+                            </label>
+                            <label>
+                                Цена
+                                <input name="price" type="number" min="0" step="0.01" required />
+                            </label>
+                            <button type="submit" class="btn btn-primary">Создать</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <aside class="panel panel--log">
+            <div class="card">
+                <h2>Лог запросов</h2>
+                <pre id="log-output" class="log-output"></pre>
+            </div>
+        </aside>
+    </main>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
+

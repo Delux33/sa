@@ -12,4 +12,10 @@ import java.util.List;
 public interface PetRepository extends CrudRepository<Pet, Long> {
 
     List<Pet> findByName(String petName);
+
+    List<Pet> findByOwnerId(Long ownerId);
+
+    List<Pet> findByOwnerIdAndName(Long ownerId, String name);
+
+    List<Pet> findByOwnerIdAndNameContainingIgnoreCase(Long ownerId, String name);
 }

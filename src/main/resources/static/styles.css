@@ -1,0 +1,390 @@
+:root {
+    --bg: #0f172a;
+    --bg-elevated: #111827;
+    --bg-card: #020617;
+    --border-subtle: #1f2937;
+    --accent: #38bdf8;
+    --accent-soft: rgba(56, 189, 248, 0.15);
+    --accent-strong: #0ea5e9;
+    --text: #e5e7eb;
+    --text-soft: #9ca3af;
+    --danger: #ef4444;
+    --radius-lg: 14px;
+    --radius-md: 10px;
+    --shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.7);
+    --shadow-subtle: 0 10px 30px rgba(15, 23, 42, 0.6);
+    --transition-fast: 0.15s ease-out;
+    --transition-med: 0.22s ease-out;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top, #1f2937 0, #020617 55%, #000 100%);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+.app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 20px 40px;
+}
+
+.app-header {
+    margin-bottom: 24px;
+    padding: 20px 24px 18px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.92));
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(148, 163, 184, 0.22);
+    position: relative;
+    overflow: hidden;
+}
+
+.app-header::before {
+    content: "";
+    position: absolute;
+    inset: -40%;
+    background:
+            radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.14), transparent 55%),
+            radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.16), transparent 55%);
+    opacity: 0.9;
+    pointer-events: none;
+}
+
+.app-header h1 {
+    margin: 0 0 4px;
+    font-size: 24px;
+    letter-spacing: 0.02em;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.app-header h1::after {
+    content: "beta";
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.11em;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(148, 163, 184, 0.5);
+    color: var(--text-soft);
+}
+
+.app-header p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-soft);
+    position: relative;
+}
+
+.app-main {
+    display: grid;
+    grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.panel {
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.95);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+    backdrop-filter: blur(22px);
+    box-shadow: var(--shadow-soft);
+}
+
+.panel--tabs {
+    padding: 14px 16px 16px;
+}
+
+.panel--log {
+    padding: 14px 14px 16px;
+}
+
+.tabs {
+    display: inline-flex;
+    padding: 4px;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.9);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+    box-shadow: var(--shadow-subtle);
+    margin-bottom: 12px;
+}
+
+.tab {
+    position: relative;
+    border: none;
+    background: transparent;
+    color: var(--text-soft);
+    padding: 7px 16px;
+    font-size: 13px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: color var(--transition-fast);
+}
+
+.tab::before {
+    content: "";
+    position: absolute;
+    inset: 2px;
+    border-radius: inherit;
+    background: radial-gradient(circle at top, rgba(56, 189, 248, 0.14), rgba(15, 23, 42, 0.95));
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity var(--transition-med), transform var(--transition-med);
+    z-index: -1;
+}
+
+.tab.active {
+    color: var(--accent-strong);
+}
+
+.tab.active::before {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.panel-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: 12px;
+}
+
+.card {
+    background: radial-gradient(circle at top left, rgba(15, 23, 42, 0.9), rgba(17, 24, 39, 0.98));
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(31, 41, 55, 0.85);
+    padding: 12px 12px 10px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.card h2 {
+    margin: 0 0 8px;
+    font-size: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.toolbar {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.table-wrapper {
+    max-height: 290px;
+    overflow: auto;
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+    background: radial-gradient(circle at top, rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 1));
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    background: linear-gradient(to bottom, #020617, #020617);
+    z-index: 1;
+}
+
+th,
+td {
+    padding: 6px 8px;
+    border-bottom: 1px solid rgba(31, 41, 55, 0.8);
+    text-align: left;
+    white-space: nowrap;
+}
+
+th {
+    font-weight: 500;
+    color: var(--text-soft);
+    font-size: 11px;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:nth-child(even) {
+    background: rgba(15, 23, 42, 0.9);
+}
+
+.btn {
+    border-radius: 999px;
+    border: none;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-primary {
+    background: radial-gradient(circle at top, var(--accent-strong), var(--accent));
+    color: #0b1120;
+    box-shadow: 0 10px 25px rgba(56, 189, 248, 0.45);
+}
+
+.btn-secondary {
+    background: rgba(15, 23, 42, 0.9);
+    color: var(--text);
+    border: 1px solid rgba(55, 65, 81, 0.9);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+
+.btn-primary:hover {
+    box-shadow: 0 14px 30px rgba(56, 189, 248, 0.55);
+}
+
+.btn-secondary:hover {
+    background: rgba(15, 23, 42, 1);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-inline {
+    flex-wrap: wrap;
+    flex-direction: row;
+    align-items: flex-end;
+}
+
+.form label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 11px;
+    color: var(--text-soft);
+}
+
+.form-inline label {
+    min-width: 110px;
+}
+
+input,
+select {
+    border-radius: 999px;
+    border: 1px solid rgba(55, 65, 81, 0.9);
+    background: rgba(15, 23, 42, 0.95);
+    color: var(--text);
+    padding: 4px 10px;
+    font-size: 12px;
+    outline: none;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+}
+
+input:focus,
+select:focus {
+    border-color: var(--accent-strong);
+    box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.3);
+    background: rgba(15, 23, 42, 1);
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 2px 8px;
+    font-size: 11px;
+    color: var(--text-soft);
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 6px;
+}
+
+.pagination button {
+    font-size: 11px;
+    padding: 3px 8px;
+}
+
+.log-output {
+    margin: 0;
+    background: radial-gradient(circle at top left, var(--bg-card), var(--bg-elevated));
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(31, 41, 55, 0.9);
+    padding: 8px 10px;
+    max-height: 430px;
+    overflow: auto;
+    font-size: 11px;
+    line-height: 1.4;
+    color: var(--text-soft);
+}
+
+.log-line {
+    margin-bottom: 3px;
+}
+
+.log-line--error {
+    color: var(--danger);
+}
+
+.log-line time {
+    color: rgba(148, 163, 184, 0.9);
+    margin-right: 4px;
+}
+
+.log-line code {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+@media (max-width: 1024px) {
+    .app-main {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .panel--log {
+        order: 3;
+    }
+}
+
+@media (max-width: 768px) {
+    .panel-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .form-inline {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+

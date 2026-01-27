@@ -5,16 +5,23 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@EqualsAndHashCode(of = "id")
+@ToString(exclude = "pets")
 @Table(name = "users")
 public class User {
 
@@ -36,6 +43,11 @@ public class User {
 
     private String surname;
 
-    @OneToMany(mappedBy = "owner" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private List<Pet> pets;
+    @OneToMany(
+            mappedBy = "owner",
+            fetch = FetchType.EAGER,
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Pet> pets = new ArrayList<>();
 }
