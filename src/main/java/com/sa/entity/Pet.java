@@ -1,6 +1,7 @@
 package com.sa.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -40,4 +41,9 @@ public class Pet {
     @JoinColumn(name = "owner_id", nullable = false)
     @JsonBackReference
     private User owner;
+
+    @JsonProperty("ownerId")
+    public Long getOwnerId() {
+        return owner != null ? owner.getId() : null;
+    }
 }

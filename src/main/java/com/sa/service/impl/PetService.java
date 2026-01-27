@@ -79,17 +79,59 @@ public class PetService implements IDefaultService<Pet> {
 
         List<Pet> baseList;
         if (name != null && !name.isBlank()) {
-            baseList = petRepo.findByOwnerIdAndName(ownerId, name);
+            baseList = petRepo.findByOwner_IdAndName(ownerId, name);
         } else if (nameContains != null && !nameContains.isBlank()) {
-            baseList = petRepo.findByOwnerIdAndNameContainingIgnoreCase(ownerId, nameContains);
+            baseList = petRepo.findByOwner_IdAndNameContainingIgnoreCase(ownerId, nameContains);
         } else {
-            baseList = petRepo.findByOwnerId(ownerId);
+            baseList = petRepo.findByOwner_Id(ownerId);
+        }
+
+        Comparator<Pet> comparator;
+        switch (sortBy) {
+            case "name" -> comparator = Comparator.comparing(Pet::getName, String.CASE_INSENSITIVE_ORDER);
+            default -> comparator = Comparator.comparing(Pet::getId, Comparator.nullsLast(Long::compareTo));
+        }
+        if (direction == Sort.Direction.DESC) {
+            comparator = comparator.reversed();
+        }
+        baseList.sort(comparator);
+
+        int fromIndex = Math.min(page * size, baseList.size());
+        int toIndex = Math.min(fromIndex + size, baseList.size());
+        List<Pet> content = baseList.subList(fromIndex, toIndex);
+
+        Page<Pet> result = new PageImpl<>(content, PageRequest.of(page, size, sort), baseList.size());
+        return ResponseEntity.ok(result);
+    }
+
+    public ResponseEntity<Page<Pet>> getAllPets(
+            int page,
+            int size,
+            String sortBy,
+            String sortDir,
+            String name,
+            String nameContains
+    ) {
+        Sort.Direction direction = Sort.Direction.fromOptionalString(sortDir).orElse(Sort.Direction.ASC);
+        Sort sort = Sort.by(direction, sortBy);
+
+        List<Pet> baseList;
+        if (name != null && !name.isBlank()) {
+            baseList = petRepo.findByName(name);
+        } else if (nameContains != null && !nameContains.isBlank()) {
+            baseList = petRepo.findByNameContainingIgnoreCase(nameContains);
+        } else {
+            baseList = (List<Pet>) petRepo.findAll();
         }
 
         Comparator<Pet> comparator;
         switch (sortBy) {
             case "name" -> comparator = Comparator.comparing(Pet::getName, String.CASE_INSENSITIVE_ORDER);
             case "id" -> comparator = Comparator.comparing(Pet::getId, Comparator.nullsLast(Long::compareTo));
+            case "ownerId" -> comparator = Comparator.comparing(
+                    p -> p.getOwner() != null ? p.getOwner().getId() : null,
+                    Comparator.nullsLast(Long::compareTo)
+            );
             default -> comparator = Comparator.comparing(Pet::getId, Comparator.nullsLast(Long::compareTo));
         }
         if (direction == Sort.Direction.DESC) {

@@ -164,7 +164,7 @@ function renderPetsPage(pageData) {
     tr.innerHTML = `
       <td>${p.id ?? ""}</td>
       <td>${p.name ?? ""}</td>
-      <td>${p.owner?.id ?? ""}</td>
+      <td>${p.ownerId ?? ""}</td>
     `;
     petsTbody.appendChild(tr);
   });
@@ -218,22 +218,44 @@ async function loadPetsForUser(query) {
   if (query.nameContains) params.set("nameContains", query.nameContains);
 
   try {
-    const data = await apiRequest(
-      `/api/users/${encodeURIComponent(query.userId)}/pets?${params.toString()}`
-    );
+    let url;
+    if (query.userId) {
+      url = `/api/users/${encodeURIComponent(query.userId)}/pets?${params.toString()}`;
+    } else {
+      url = `/api/pets?${params.toString()}`;
+    }
+    const data = await apiRequest(url);
     renderPetsPage(data);
   } catch {
     // logged
   }
 }
 
+async function loadAllPets() {
+  const query = {
+    userId: null,
+    page: 0,
+    size: 10,
+    sortBy: "id",
+    sortDir: "ASC",
+    name: null,
+    nameContains: null,
+  };
+  await loadPetsForUser(query);
+}
+
+document
+  .getElementById("load-all-pets")
+  .addEventListener("click", () => loadAllPets());
+
 document
   .getElementById("load-user-pets-form")
   .addEventListener("submit", async (e) => {
     e.preventDefault();
     const form = e.target;
-    const userId = parseInt(form.userId.value, 10);
-    if (!userId || userId <= 0) {
+    const userIdValue = form.userId.value.trim();
+    const userId = userIdValue ? parseInt(userIdValue, 10) : null;
+    if (userId !== null && (!userId || userId <= 0)) {
       log("Некорректный ID пользователя", "error");
       return;
     }

@@ -14,16 +14,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/users/{userId}/pets")
 @RequiredArgsConstructor
 @Tag(name = "Pet API", description = "API по управлению питомцами")
 public class PetController {
@@ -46,7 +44,10 @@ public class PetController {
                     )
             }
     )
-    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE})
+    @PostMapping(
+            value = "api/users/{userId}/pets",
+            consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE}
+    )
     public ResponseEntity<Void> createPetForUser(@PathVariable Long userId,
                                                  @io.swagger.v3.oas.annotations.parameters.RequestBody @RequestBody
                                                  Pet pet) {
@@ -75,7 +76,7 @@ public class PetController {
                     )
             }
     )
-    @GetMapping("/{petId}")
+    @GetMapping("api/users/{userId}/pets/{petId}")
     public ResponseEntity<Pet> getPetForUser(@PathVariable Long userId, @PathVariable Long petId) {
         ResponseEntity<Pet> petResponse = petService.getById(petId);
         if (!petResponse.getStatusCode().is2xxSuccessful() || petResponse.getBody() == null) {
@@ -105,7 +106,7 @@ public class PetController {
                     )
             }
     )
-    @GetMapping
+    @GetMapping("api/users/{userId}/pets")
     public ResponseEntity<?> getUserPets(
             @PathVariable Long userId,
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -120,5 +121,36 @@ public class PetController {
         }
 
         return petService.searchPetsByOwner(userId, page, size, sortBy, sortDir, name, nameContains);
+    }
+
+    @Operation(summary = "Получить список всех питомцев в системе с фильтрами и пагинацией")
+    @ApiResponses(
+            value = {
+                    @ApiResponse(
+                            responseCode = Constants.StatusCode.OK_200_STR,
+                            description = "Питомцы найдены",
+                            content = @Content
+                    ),
+                    @ApiResponse(
+                            responseCode = Constants.StatusCode.BAD_REQUEST_400_STR,
+                            description = "Некорректный запрос",
+                            content = @Content
+                    )
+            }
+    )
+    @GetMapping("api/pets")
+    public ResponseEntity<?> getAllPets(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sortBy", defaultValue = "id") String sortBy,
+            @RequestParam(name = "sortDir", defaultValue = "ASC") String sortDir,
+            @RequestParam(name = "name", required = false) String name,
+            @RequestParam(name = "nameContains", required = false) String nameContains
+    ) {
+        if (page < 0 || size <= 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        return petService.getAllPets(page, size, sortBy, sortDir, name, nameContains);
     }
 }

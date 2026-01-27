@@ -67,11 +67,14 @@
             <div class="tab-content" id="tab-pets">
                 <div class="panel-grid">
                     <div class="card">
-                        <h2>Питомцы пользователя</h2>
+                        <h2>Питомцы</h2>
+                        <div class="toolbar">
+                            <button id="load-all-pets" class="btn btn-secondary">Все питомцы</button>
+                        </div>
                         <form id="load-user-pets-form" class="form form-inline">
                             <label>
                                 ID пользователя
-                                <input name="userId" type="number" min="1" required />
+                                <input name="userId" type="number" min="1" />
                             </label>
                             <label>
                                 Имя (точно)
@@ -94,6 +97,7 @@
                                 <select name="sortBy">
                                     <option value="id">id</option>
                                     <option value="name">name</option>
+                                    <option value="ownerId">ownerId</option>
                                 </select>
                             </label>
                             <label>

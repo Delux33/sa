@@ -13,9 +13,11 @@ public interface PetRepository extends CrudRepository<Pet, Long> {
 
     List<Pet> findByName(String petName);
 
-    List<Pet> findByOwnerId(Long ownerId);
+    List<Pet> findByNameContainingIgnoreCase(String name);
 
-    List<Pet> findByOwnerIdAndName(Long ownerId, String name);
+    List<Pet> findByOwner_Id(Long ownerId);
 
-    List<Pet> findByOwnerIdAndNameContainingIgnoreCase(Long ownerId, String name);
+    List<Pet> findByOwner_IdAndName(Long ownerId, String name);
+
+    List<Pet> findByOwner_IdAndNameContainingIgnoreCase(Long ownerId, String name);
 }
