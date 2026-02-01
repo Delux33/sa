@@ -1,0 +1,25 @@
+services:
+  postgresql:
+    build:
+      context: .
+      dockerfile: Dockerfile-db
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: sa
+
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgresql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/postgres
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: sa

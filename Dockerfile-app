@@ -1,0 +1,4 @@
+FROM openjdk:26-ea-17-jdk-slim
+WORKDIR /app
+COPY build/libs/sa-0.0.1-SNAPSHOT.jar /app/sa-0.0.1-SNAPSHOT.jar
+CMD ["java", "-jar", "sa-0.0.1-SNAPSHOT.jar"]

@@ -2,31 +2,53 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8" />
-    <title>SA Demo UI</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="SA Demo UI - Современная панель управления для работы с API" />
+    <title>SA Demo UI — API Console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 <div class="app">
     <header class="app-header">
-        <h1>System Analytics training API Console</h1>
-        <p>Панель для работы с пользователями, питомцами и продуктами</p>
+        <h1>System Analytics API Console</h1>
+        <p>Современная панель для управления пользователями, питомцами и продуктами</p>
     </header>
 
     <main class="app-main">
         <section class="panel panel--tabs">
             <div class="tabs">
-                <button class="tab active" data-tab="users">Пользователи</button>
-                <button class="tab" data-tab="pets">Питомцы</button>
-                <button class="tab" data-tab="products">Продукты</button>
+                <button class="tab active" data-tab="users">
+                    <span class="tab-icon">👤</span>
+                    <span class="tab-label">Пользователи</span>
+                </button>
+                <button class="tab" data-tab="pets">
+                    <span class="tab-icon">🐾</span>
+                    <span class="tab-label">Питомцы</span>
+                </button>
+                <button class="tab" data-tab="products">
+                    <span class="tab-icon">📦</span>
+                    <span class="tab-label">Продукты</span>
+                </button>
             </div>
 
+            <!-- Users Tab -->
             <div class="tab-content active" id="tab-users">
                 <div class="panel-grid">
                     <div class="card">
-                        <h2>Список пользователей</h2>
+                        <h2>
+                            <span>Список пользователей</span>
+                            <span class="badge" id="users-count">0</span>
+                        </h2>
                         <div class="toolbar">
-                            <button id="reload-users" class="btn btn-secondary">Обновить</button>
+                            <button id="reload-users" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                                </svg>
+                                Обновить
+                            </button>
                         </div>
                         <div class="table-wrapper">
                             <table>
@@ -47,67 +69,89 @@
                         <h2>Создать пользователя</h2>
                         <form id="create-user-form" class="form">
                             <label>
-                                Имя
-                                <input name="name" required />
+                                <span>Имя</span>
+                                <input name="name" required placeholder="Введите имя..." />
                             </label>
                             <label>
-                                Фамилия
-                                <input name="lastname" />
+                                <span>Фамилия</span>
+                                <input name="lastname" placeholder="Введите фамилию..." />
                             </label>
                             <label>
-                                Отчество
-                                <input name="surname" />
+                                <span>Отчество</span>
+                                <input name="surname" placeholder="Введите отчество..." />
                             </label>
-                            <button type="submit" class="btn btn-primary">Создать</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Создать пользователя
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- Pets Tab -->
             <div class="tab-content" id="tab-pets">
                 <div class="panel-grid">
                     <div class="card">
-                        <h2>Питомцы</h2>
+                        <h2>
+                            <span>Питомцы</span>
+                            <span class="badge" id="pets-count">0</span>
+                        </h2>
                         <div class="toolbar">
-                            <button id="load-all-pets" class="btn btn-secondary">Все питомцы</button>
+                            <button id="load-all-pets" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M12 16v-4M12 8h.01"/>
+                                </svg>
+                                Все питомцы
+                            </button>
                         </div>
+                        
                         <form id="load-user-pets-form" class="form form-inline">
                             <label>
-                                ID пользователя
-                                <input name="userId" type="number" min="1" />
+                                <span>ID пользователя</span>
+                                <input name="userId" type="number" min="1" placeholder="ID..." />
                             </label>
                             <label>
-                                Имя (точно)
-                                <input name="name" />
+                                <span>Имя (точно)</span>
+                                <input name="name" placeholder="Имя..." />
                             </label>
                             <label>
-                                Имя содержит
-                                <input name="nameContains" />
+                                <span>Имя содержит</span>
+                                <input name="nameContains" placeholder="Поиск..." />
                             </label>
                             <label>
-                                Страница
+                                <span>Страница</span>
                                 <input name="page" type="number" min="0" value="0" />
                             </label>
                             <label>
-                                Размер
+                                <span>Размер</span>
                                 <input name="size" type="number" min="1" value="10" />
                             </label>
                             <label>
-                                Сортировка
+                                <span>Сортировка</span>
                                 <select name="sortBy">
-                                    <option value="id">id</option>
-                                    <option value="name">name</option>
-                                    <option value="ownerId">ownerId</option>
+                                    <option value="id">ID</option>
+                                    <option value="name">Имя</option>
+                                    <option value="ownerId">Владелец</option>
                                 </select>
                             </label>
                             <label>
-                                Направление
+                                <span>Направление</span>
                                 <select name="sortDir">
-                                    <option value="ASC">ASC</option>
-                                    <option value="DESC">DESC</option>
+                                    <option value="ASC">По возрастанию</option>
+                                    <option value="DESC">По убыванию</option>
                                 </select>
                             </label>
-                            <button type="submit" class="btn btn-secondary">Загрузить</button>
+                            <button type="submit" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                Найти
+                            </button>
                         </form>
 
                         <div id="pets-pagination" class="pagination"></div>
@@ -130,25 +174,39 @@
                         <h2>Создать питомца</h2>
                         <form id="create-pet-form" class="form">
                             <label>
-                                ID пользователя (владельца)
-                                <input name="userId" type="number" min="1" required />
+                                <span>ID владельца</span>
+                                <input name="userId" type="number" min="1" required placeholder="ID пользователя..." />
                             </label>
                             <label>
-                                Имя питомца
-                                <input name="name" required />
+                                <span>Имя питомца</span>
+                                <input name="name" required placeholder="Имя питомца..." />
                             </label>
-                            <button type="submit" class="btn btn-primary">Создать</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Создать питомца
+                            </button>
                         </form>
                     </div>
                 </div>
             </div>
 
+            <!-- Products Tab -->
             <div class="tab-content" id="tab-products">
                 <div class="panel-grid">
                     <div class="card">
-                        <h2>Список продуктов</h2>
+                        <h2>
+                            <span>Список продуктов</span>
+                            <span class="badge" id="products-count">0</span>
+                        </h2>
                         <div class="toolbar">
-                            <button id="reload-products" class="btn btn-secondary">Обновить</button>
+                            <button id="reload-products" class="btn btn-secondary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M23 4v6h-6M1 20v-6h6M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+                                </svg>
+                                Обновить
+                            </button>
                         </div>
                         <div class="table-wrapper">
                             <table>
@@ -168,14 +226,19 @@
                         <h2>Создать продукт</h2>
                         <form id="create-product-form" class="form">
                             <label>
-                                Название
-                                <input name="name" required />
+                                <span>Название</span>
+                                <input name="name" required placeholder="Название продукта..." />
                             </label>
                             <label>
-                                Цена
-                                <input name="price" type="number" min="0" step="0.01" required />
+                                <span>Цена</span>
+                                <input name="price" type="number" min="0" step="0.01" required placeholder="0.00" />
                             </label>
-                            <button type="submit" class="btn btn-primary">Создать</button>
+                            <button type="submit" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M12 5v14M5 12h14"/>
+                                </svg>
+                                Создать продукт
+                            </button>
                         </form>
                     </div>
                 </div>
@@ -184,7 +247,16 @@
 
         <aside class="panel panel--log">
             <div class="card">
-                <h2>Лог запросов</h2>
+                <h2>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    Лог запросов
+                </h2>
                 <pre id="log-output" class="log-output"></pre>
             </div>
         </aside>
@@ -194,4 +266,3 @@
 <script src="app.js"></script>
 </body>
 </html>
-
