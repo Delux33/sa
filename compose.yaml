@@ -4,12 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile-db
     image: postgres:latest
+    container_name: postgres
     ports:
       - "5432:5432"
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: sa
+      POSTGRES_PASSWORD: postgres
 
   spring-app:
     build:
@@ -22,4 +23,4 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgresql:5432/postgres
       SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: sa
+      SPRING_DATASOURCE_PASSWORD: postgres
